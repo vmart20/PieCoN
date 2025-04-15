@@ -132,5 +132,5 @@ if __name__ == '__main__':
     # Compute 95% confidence interval for test_accs
     test_accs = np.array(test_accs)
     std_error = np.std(test_accs, ddof=1) / np.sqrt(args.runs)
-    confidence_interval = 100*np.max(np.abs(sns.utils.ci(sns.algorithms.bootstrap(test_accs,func=np.mean,n_boot=1000),95)-mean_test_acc.mean()))
+    confidence_interval = 100*np.max(np.abs(sns.utils.ci(sns.algorithms.bootstrap(test_accs,func=np.mean,n_boot=1000),95)-mean_test_acc))
     print(f"95% confidence interval for test accs: ±{confidence_interval:.4f}")
