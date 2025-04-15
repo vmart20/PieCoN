@@ -97,14 +97,13 @@ def eig_dgl_adj_sparse(g, sm=0, lm=0):
     D_ = sp.sparse.diags(deg ** -0.5)
 
     A_ = D_.dot(A.dot(D_))
-    L_ = sp.sparse.eye(g.num_nodes()) - A_
 
     if sm > 0:
-        e1, u1 = sp.sparse.linalg.eigsh(L_, k=sm, which='SM', tol=1e-5)
+        e1, u1 = sp.sparse.linalg.eigsh(A_, k=sm, which='SM', tol=1e-5)
         e1, u1 = map(torch.FloatTensor, (e1, u1))
 
     if lm > 0:
-        e2, u2 = sp.sparse.linalg.eigsh(L_, k=lm, which='LM', tol=1e-5)
+        e2, u2 = sp.sparse.linalg.eigsh(A_, k=lm, which='LM', tol=1e-5)
         e2, u2 = map(torch.FloatTensor, (e2, u2))
 
     if sm > 0 and lm > 0:
@@ -242,7 +241,7 @@ def generate_node_data(dataset):
         torch.save([e, u, x, y, torch.tensor(adj)],  'proc_data/{}.pt'.format(dataset))
 
     elif dataset in ["texas"]:
-        data = WebKB(root='/home/vahan/gnn/node_raw_data', name=dataset)[0]
+        data = WebKB(root='node_raw_data', name=dataset)[0]
         # edge_index_tensor = torch.tensor(data.edge_index, dtype=torch.long).t().contiguous()
         y = data.y
         x = data.x

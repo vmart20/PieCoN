@@ -48,16 +48,6 @@ cora:
   num_limits: 11
   power: 10
   weight_decay: 0.001
-cornell:
-  average_length: 16
-  epoch: 2000
-  feat_dropout: 0.2
-  hidden_dim: 64
-  lr: 0.05
-  nclass: 5
-  num_limits: 10
-  power: 10
-  weight_decay: 0.001
 photo:
   average_length: 4
   epoch: 2000
