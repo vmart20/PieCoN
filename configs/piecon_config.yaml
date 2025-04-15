@@ -1,0 +1,100 @@
+actor:
+  average_length: 20
+  epoch: 2000
+  feat_dropout: 0.7
+  hidden_dim: 64
+  lr: 0.05
+  nclass: 5
+  num_limits: 8
+  power: 10
+  weight_decay: 0.0
+amazon_ratings:
+  average_length: 30
+  epoch: 2000
+  feat_dropout: 0.4
+  hidden_dim: 64
+  lr: 0.01
+  nclass: 18
+  num_limits: 19
+  power: 10
+  weight_decay: 0.0
+chameleon:
+  average_length: 17
+  epoch: 2000
+  feat_dropout: 0.4
+  hidden_dim: 64
+  lr: 0.01
+  nclass: 5
+  num_limits: 10
+  power: 10
+  weight_decay: 0.0001
+citeseer:
+  average_length: 7
+  epoch: 2000
+  feat_dropout: 0.9
+  hidden_dim: 64
+  lr: 0.0005
+  nclass: 6
+  num_limits: 6
+  power: 10
+  weight_decay: 0.001
+cora:
+  average_length: 4
+  epoch: 2000
+  feat_dropout: 0.3
+  hidden_dim: 32
+  lr: 0.05
+  nclass: 7
+  num_limits: 11
+  power: 10
+  weight_decay: 0.001
+cornell:
+  average_length: 16
+  epoch: 2000
+  feat_dropout: 0.2
+  hidden_dim: 64
+  lr: 0.05
+  nclass: 5
+  num_limits: 10
+  power: 10
+  weight_decay: 0.001
+photo:
+  average_length: 4
+  epoch: 2000
+  feat_dropout: 0.4
+  hidden_dim: 32
+  lr: 0.01
+  nclass: 8
+  num_limits: 16
+  power: 10
+  weight_decay: 5.0e-05
+squirrel:
+  average_length: 13
+  epoch: 2000
+  feat_dropout: 0.4
+  hidden_dim: 64
+  lr: 0.01
+  nclass: 5
+  num_limits: 19
+  power: 10
+  weight_decay: 0.0
+pubmed:
+  average_length: 95
+  epoch: 2000
+  feat_dropout: 0.3
+  hidden_dim: 64
+  lr: 0.05
+  nclass: 3
+  num_limits: 6
+  power: 5
+  weight_decay: 0.0001
+texas:
+  average_length: 40
+  epoch: 2000
+  feat_dropout: 0.3
+  hidden_dim: 64
+  lr: 0.05
+  nclass: 5
+  num_limits: 10
+  power: 2
+  weight_decay: 0.001
