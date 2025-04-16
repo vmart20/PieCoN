@@ -1,5 +1,3 @@
-import os, sys
-# sys.path.append(os.path.join(os.getcwd()))
 import torch
 import torch.nn as nn
 
@@ -30,10 +28,10 @@ class Combination(nn.Module):
         return x
     
 
-class EigenvalueSegmentPrec(nn.Module):
+class EigenvalueSegment(nn.Module):
 
     def __init__(self, nclass, nfeat, hidden_dim=128, feat_dropout=0.0, power=10, const_filters=[], norm_adj=None):
-        super(EigenvalueSegmentPrec, self).__init__()
+        super(EigenvalueSegment, self).__init__()
 
         self.const_filters = const_filters
         self.norm_adj = norm_adj

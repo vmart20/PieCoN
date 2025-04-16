@@ -9,15 +9,15 @@ actor:
   power: 10
   weight_decay: 0.0
 amazon_ratings:
-  average_length: 30
+  average_length: 4
   epoch: 2000
   feat_dropout: 0.4
   hidden_dim: 64
   lr: 0.01
-  nclass: 18
-  num_limits: 19
+  nclass: 5
+  num_limits: 7
   power: 10
-  weight_decay: 0.0
+  weight_decay: 0.0005
 chameleon:
   average_length: 17
   epoch: 2000

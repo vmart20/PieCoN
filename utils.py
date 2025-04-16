@@ -1,13 +1,10 @@
+import os
 import time
-import math
 import random
 import numpy as np
-import scipy as sp
-import os
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
-from torch_sparse import SparseTensor
 
 def count_parameters(model):
     return sum(p.numel() for p in model.parameters() if p.requires_grad)
@@ -95,7 +92,7 @@ def train_model(net, optimizer, evaluation, epoch, train, valid, test, y, net_ar
         res.append([train_acc, val_loss, val_acc, test_acc])
 
         if idx % 100 == 0 and idx != 0:
-            print(f"Epoch {idx}: train_acc={train_acc:.2f}, val_loss={val_loss:.2f}, val_acc={val_acc:.2f}")
+            print(f"Epoch {idx}: train_acc={train_acc:.4f}, val_loss={val_loss:.4f}, val_acc={val_acc:.4f}")
         
         if val_acc > best_val_acc:
             counter = 0

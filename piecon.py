@@ -1,34 +1,17 @@
-import os, sys
-sys.path.append(os.path.join(os.getcwd()))
-
-import time
 import yaml
-import copy
-import math
-import random
 import argparse
 import numpy as np
 import torch
-import torch.nn as nn
-import torch.nn.functional as F
 import torchmetrics
 from torch_sparse import SparseTensor
-from sklearn.metrics import roc_auc_score, mean_absolute_error, accuracy_score, r2_score
-from models  import EigenvalueSegmentPrec
-from utils import count_parameters, init_params, seed_everything, get_split, train_model, normalize_adjacency
+from models  import EigenvalueSegment
+from utils import init_params, seed_everything, get_split, train_model, normalize_adjacency
 from construct_const_filters import get_constant_filters
-from scipy import signal
-from copy import deepcopy
 import seaborn as sns
 
-hyperparameter_list = ['num_limits', 'save_path', 'dataset', 'cuda', 'seed', 'image', 'nlayer', 'num_heads', 'hidden_dim', 'epoch', 'lr', 'weight_decay', 'tran_dropout', 'feat_dropout', 'prop_dropout', 'norm']
-
 def main_worker(config):
-    if config["cuda"]:
-        device = "cuda"
-    torch.device(device)
-    # device = 'cuda:{}'.format(args.cuda)
-    # torch.cuda.set_device(args.seed)
+    device = "cuda" if config["cuda"] == 1 else "cpu"
+    device = torch.device(device)
 
     dataset = config['dataset']
     epoch = config['epoch']
@@ -40,13 +23,11 @@ def main_worker(config):
     average_length = config['average_length']
     power = config["power"]
 
-
     data_path =  'proc_data/{}.pt'.format(dataset)
     e, u, x, y, adj = torch.load(data_path)
-    e, u, x, y, adj = e.cuda(), u.cuda(), x.cuda(), y.cuda(), adj.cuda()
+    e, u, x, y, adj = e.to(device), u.to(device), x.to(device), y.to(device), adj.to(device)
 
-
-    norm_adj = SparseTensor.from_dense(normalize_adjacency(adj)).coalesce().cuda()
+    norm_adj = SparseTensor.from_dense(normalize_adjacency(adj)).coalesce().to(device)
 
     if len(y.size()) > 1:
         if y.size(1) > 1:
@@ -56,7 +37,7 @@ def main_worker(config):
 
     train, valid, test = get_split(y, nclass) 
     train, valid, test = map(torch.LongTensor, (train, valid, test))
-    train, valid, test = train.cuda(), valid.cuda(), test.cuda()
+    train, valid, test = train.to(device), valid.to(device), test.to(device)
 
     # Get the number of edges
     num_nonzeros = torch.sum(adj > 0)
@@ -65,7 +46,7 @@ def main_worker(config):
 
     nfeat = x.size(1)
 
-    net = EigenvalueSegmentPrec(nclass, nfeat, hidden_dim, feat_dropout, power = power, const_filters = const_filters, norm_adj=norm_adj).cuda()
+    net = EigenvalueSegment(nclass, nfeat, hidden_dim, feat_dropout, power=power, const_filters=const_filters, norm_adj=norm_adj).to(device)
 
     net.apply(init_params)
     optimizer = torch.optim.Adam(net.parameters(), lr=lr, weight_decay=weight_decay)
@@ -125,12 +106,14 @@ if __name__ == '__main__':
         mean_val_acc, mean_test_acc, mean_epcoh_time = main_worker(config)
         test_accs.append(mean_test_acc)
     
-    print(f"Mean val acc: {mean_val_acc:.4f}")
+    print()
     print(f"Mean epoch time: {mean_epcoh_time:.4f}")
+    print(f"Mean val acc: {mean_val_acc:.4f}")
     print(f"Mean test acc: {mean_test_acc:.4f}")
 
     # Compute 95% confidence interval for test_accs
-    test_accs = np.array(test_accs)
-    std_error = np.std(test_accs, ddof=1) / np.sqrt(args.runs)
-    confidence_interval = 100*np.max(np.abs(sns.utils.ci(sns.algorithms.bootstrap(test_accs,func=np.mean,n_boot=1000),95)-mean_test_acc))
-    print(f"95% confidence interval for test accs: ±{confidence_interval:.4f}")
+    if config["runs"] > 1:
+        test_accs = np.array(test_accs)
+        std_error = np.std(test_accs, ddof=1) / np.sqrt(args.runs)
+        confidence_interval = 100*np.max(np.abs(sns.utils.ci(sns.algorithms.bootstrap(test_accs,func=np.mean,n_boot=1000),95)-mean_test_acc))
+        print(f"95% confidence interval for test accs: ±{confidence_interval:.4f}")
