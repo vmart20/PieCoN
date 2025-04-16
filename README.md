@@ -6,8 +6,7 @@ This repository is the official implementation of the model in the following pap
       author       = {A. Martirosyan, Vahan, and H. Giraldo, Jhony, and D. Malliaros, Fragkiskos},
       title        = {Piecewise Constant Spectral Graph Neural Network},
       journal      = {Transactions on Machine Learning Research},
-      year         = {2025},
-      note         = {Accepted}
+      year         = {2025}
     }
 
 ## Reproduce Our Results
